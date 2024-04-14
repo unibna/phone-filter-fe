@@ -2,7 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { message } from "antd";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "http://be-datavalidator.spi.vn/api";
+
 
 const register = (username, email, password, password2, admin_key) => {
   return axios.post(API_URL + "/auth/register", {

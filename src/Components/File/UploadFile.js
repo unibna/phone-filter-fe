@@ -6,7 +6,7 @@ import { DownOutlined, DownloadOutlined, InboxOutlined } from '@ant-design/icons
 
 
 const { Dragger } = Upload;
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'http://be-datavalidator.spi.vn/api';
 
 
 const columns = [
