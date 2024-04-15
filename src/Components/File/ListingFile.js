@@ -143,7 +143,6 @@ const ListFile = () => {
         setCurrentPage(page);
         setPageSize(pageSize);
         handleListingFile(page, pageSize);
-        message.info("Listing file")
     }
 
     useEffect(() => {
