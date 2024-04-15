@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Dropdown, Menu, message, Table, Tag, Upload, Button, Divider, Flex, Radio } from 'antd';
-import { DownOutlined, DownloadOutlined, InboxOutlined } from '@ant-design/icons';
+import { Dropdown, message, Table, Tag, Upload, Button, Flex, Space } from 'antd';
+import { DownOutlined, DownloadOutlined, InboxOutlined, UserOutlined } from '@ant-design/icons';
 
 
 const { Dragger } = Upload;
@@ -61,17 +61,8 @@ const columns = [
     },
   },
 ];
-const downloadFileExtensionItems = (
-  <Menu>
-    <Menu.Item key="csv">Download as CSV</Menu.Item>
-    <Menu.Item key="xlsx">Download as XLSX</Menu.Item>
-    <Menu.Item key="xls">Download as XLS</Menu.Item>
-  </Menu>
-);
-
 
 const UploadFile = () => {
-  const [downloadButtonValue, setDownloadButtonValue] = useState();
   const [isReadyToDownload, setIsReadyToDownload] = useState(false);
   const [fileObject, setFileObject] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -167,16 +158,21 @@ const UploadFile = () => {
     }
   }
 
-  const handleDownloadFile = async (index) => {
-    console.log('Download file:', index);
+  const handleDownloadFile = async (event) => {
+    console.log('Download file:', event.key);
     let fileName = 'validated_data.csv';
     if (fileObject !== null) {
       fileName = fileObject.name + "." + fileObject.tag;
     }
 
+    let query_params = "to_download=true";
+    if (event.key) {
+      query_params += "&download_file_tag=" + event.key;
+    }
+
     try {
       const response = await fetch(
-        BASE_URL + "/file/" + fileObject.id + "/results" + "?to_download=true",
+        BASE_URL + "/file/" + fileObject.id + "/results" + "?" + query_params,
       );
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -233,11 +229,20 @@ const UploadFile = () => {
     message.error('File upload failed');
   };
 
-  const handleDownloadButtonChange = (e) => {
-    console.log('Download button change:', e.target.value);
-    setDownloadButtonValue(e.target.value);
-    handleDownloadFile(e.target.value);
-  }
+  const items = [
+    {
+      label: 'Download as CSV',
+      key: 'csv',
+    },
+    {
+      label: 'Download as XLSX',
+      key: 'xlsx',
+    },
+  ]
+  const menuProps = {
+    items,
+    onClick: handleDownloadFile,
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -257,14 +262,17 @@ const UploadFile = () => {
 
       <div>
         <Flex gap="middle" align="end" vertical>
-          <Button
-            type="primary"
-            icon={<DownloadOutlined />}
-            disabled={!isReadyToDownload}
-            onClick={handleDownloadFile}
-          >
-            Download
-          </Button>
+            <Dropdown menu={menuProps}>
+              <Button
+                type="primary"
+                disabled={!isReadyToDownload}
+              >
+                <Space>
+                  Download
+                  <DownloadOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
         </Flex>
       </div>
 
@@ -287,7 +295,7 @@ const UploadFile = () => {
         />
       </div>
 
-    </div>
+    </div >
   );
 };
 
