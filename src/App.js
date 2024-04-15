@@ -9,10 +9,8 @@ import AuthPage from "./Pages/AuthPage";
 import LoginPage from "./Pages/AuthPage/LoginPage";
 import RegisterPage from "./Pages/AuthPage/RegisterPage";
 import LogoutPage from "./Pages/AuthPage/LogoutPage";
-import FilePage from "./Pages/FilePage";
 import FileListingPage from "./Pages/FilePage/FileListingPage";
 import FileUploadingPage from "./Pages/FilePage/FileUploadingPage";
-import UserPage from "./Pages/UserPage";
 import UserDetailPage from "./Pages/UserPage/UserDetailPage";
 
 
