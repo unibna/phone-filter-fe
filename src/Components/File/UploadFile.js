@@ -241,6 +241,7 @@ const UploadFile = () => {
   ]
   const menuProps = {
     items,
+    disabled: !isReadyToDownload,
     onClick: handleDownloadFile,
   };
 
@@ -257,16 +258,14 @@ const UploadFile = () => {
             <InboxOutlined />
           </p>
           <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-text">Only support for CSV, or XLSX file</p>
         </Dragger>
       </div>
 
       <div>
         <Flex gap="middle" align="end" vertical>
             <Dropdown menu={menuProps}>
-              <Button
-                type="primary"
-                disabled={!isReadyToDownload}
-              >
+              <Button type="primary">
                 <Space>
                   Download
                   <DownloadOutlined />
