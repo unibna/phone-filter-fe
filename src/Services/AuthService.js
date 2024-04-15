@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { message } from "antd";
 
-const API_URL = "http://be-datavalidator.spi.vn/api";
+const API_URL = process.env.REACT_APP_API_URL;
 
 
 const register = (username, email, password, password2, admin_key) => {
@@ -40,6 +40,7 @@ const me = () => {
 
 const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("authToken");
   return axios.post(API_URL + "/auth/logout").then((response) => {
     return response.data;
   });
@@ -49,12 +50,23 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("authToken"));
 };
 
+const getToken = () => {
+  return JSON.parse(localStorage.getItem("authToken"));
+};
+
+const getAccessToken = () => {
+  const tokenPair = JSON.parse(localStorage.getItem("authToken"));
+  return tokenPair ? tokenPair.access : null;
+};
+
 const AuthService = {
   register,
   login,
   logout,
   me,
+  getAccessToken,
   getCurrentUser,
+  getToken,
 };
 
 export default AuthService;

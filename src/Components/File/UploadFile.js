@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { Dropdown, message, Table, Tag, Upload, Button, Flex, Space } from 'antd';
 import { DownOutlined, DownloadOutlined, InboxOutlined, UserOutlined } from '@ant-design/icons';
 
+import AuthService from '../../Services/AuthService';
+
 
 const { Dragger } = Upload;
-const BASE_URL = 'http://be-datavalidator.spi.vn/api';
+const API_URL = process.env.REACT_APP_API_URL;
 
 
 const columns = [
@@ -62,7 +64,9 @@ const columns = [
   },
 ];
 
+
 const UploadFile = () => {
+  const [token, _] = useState(AuthService.getToken());
   const [isReadyToDownload, setIsReadyToDownload] = useState(false);
   const [fileObject, setFileObject] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -79,14 +83,16 @@ const UploadFile = () => {
       const formData = new FormData();
       formData.append('file', file);
 
+      const headers = {}
+      headers['Content-Type'] = 'multipart/form-data'
+      if (token) {
+        headers['Authorization'] = `Bearer ${token.access}`;
+      }
+
       const response = await axios.post(
-        BASE_URL + "/file/upload",
+        API_URL + "/file/upload",
         formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
+        { headers },
       );
 
       console.log('Upload response:', response.data);
@@ -111,7 +117,7 @@ const UploadFile = () => {
   const handleGetProcessedFileResult = async (fileId, currentPage, pageSize, retryCount = 10, timeOut = 1000) => {
     try {
       const response = await axios.get(
-        BASE_URL + "/file/" + fileId + "/results",
+        API_URL + "/file/" + fileId + "/results",
         {
           params: {
             page: currentPage,
@@ -172,7 +178,7 @@ const UploadFile = () => {
 
     try {
       const response = await fetch(
-        BASE_URL + "/file/" + fileObject.id + "/results" + "?" + query_params,
+        API_URL + "/file/" + fileObject.id + "/results" + "?" + query_params,
       );
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -277,9 +283,10 @@ const UploadFile = () => {
 
       <div style={{ marginTop: '20px' }}>
         <Table
+          bordered
+          dataSource={dataSource}
           columns={columns}
           scroll={{ y: 240 }}
-          dataSource={dataSource}
           pagination={{
             current: currentPage,
             pageSize: pageSize,

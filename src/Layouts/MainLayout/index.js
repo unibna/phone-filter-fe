@@ -20,25 +20,56 @@ const contentStyle = {
 const menuStyle = {
   minHeight: 'calc(100vh)',
 }
-
-
 const items = [
   {
-    path: "/file",
-    key: "file",
-    icon: React.createElement(FileSearchOutlined),
-    label: (
-      <a href="/file">File</a>
-    ),
+    label: 'User',
+    key: 'user',
+    icon: <UserOutlined />,
+    children: [
+      {
+        path: '/user/detail',
+        label: (
+          <a href="/user/detail">Me</a>
+        ),
+        key: 'user-register',
+      },
+      {
+        path: '/auth/register',
+        label: (
+          <a href="/auth/register">Register</a>
+        ),
+        key: 'auth-register',
+      },
+      {
+        path: '/auth/logout',
+        label: (
+          <a href="/auth/logout">Logout</a>
+        ),
+        key: 'auth-logout',
+      },
+    ],
   },
-  { 
-    path: "/register",
-    key: "register",
-    icon: React.createElement(PlusCircleOutlined),
-    label: (
-      <a href="/auth/register">Register</a>
-    ),
-  },
+  {
+    label: 'File',
+    key: 'file',
+    icon: <FileSearchOutlined />,
+    children: [
+      {
+        path: '/files',
+        label: (
+          <a href="/files">File Listing</a>
+        ),
+        key: 'files',
+      },
+      {
+        path: '/files/upload',
+        label: (
+          <a href="/files/upload">File Uploading</a>
+        ),
+        key: 'files-upload',
+      },
+    ],
+  }
 ]
 
 const MainLayout = () => {
@@ -64,7 +95,7 @@ const MainLayout = () => {
           theme="light" 
           style={menuStyle} 
           mode="inline" 
-          defaultSelectedKeys={['file']} 
+          defaultSelectedKeys={['files-upload']} 
           selectedKeys={[window.location.pathname.split('/')[1]]}
           items={items} 
         />
