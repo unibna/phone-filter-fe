@@ -146,7 +146,7 @@ const ListFile = () => {
     }
 
     useEffect(() => {
-        handlePageChange(1, 2);
+        handlePageChange(1, 10);
     }, []);
 
     return (
